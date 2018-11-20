@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 /**
  * @author congyang.guo
  */
-public class music163 {
+public class Music163 {
 
 
     public static final String listMusicUrl = "https://music.163.com/weapi/user/playlist?csrf_token=";
@@ -24,10 +24,7 @@ public class music163 {
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 
-        String params = "params=" +
-                "%2FxYxBhua9Ilc8T3mb7usPGKOTPC5h8b9FJxpRHLAFjFLkrwMwmIRO7vczYIOLptMFhcGN3b8qBH0FjobzGZpm" +
-                "%2Flsp80cFE7UeXrXV9L0M99AxeHEcLXPfHBQN%2BLIglfEBKWp%2BEmPFxcSCdp97cVJRR6dFoTbbSe&encSecKey" +
-                "=8fe842b52e655f92f6bfbb2ac3ec3b9d3206f05caa412eb2b19476278761993a9d10e161440d418b18f3b768066357b6e4cd1abec99bbe7a2a8e5ecbcf94d2f0f202ae1561c46d904b2e98d0098ede07a986ccf44668fe891d1eb73fe6ffa975afe33116ebf85beda4662e4c7bb36e425ab07a14da69d5825b3e82171a12ecfc";
+        String params = "";
 
         String body =
                 Jsoup.connect(listMusicUrl).requestBody(params).ignoreContentType(true).method(Connection.Method

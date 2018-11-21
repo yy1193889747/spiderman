@@ -2,7 +2,9 @@ package com.cy.spiderman.repository;
 
 import com.cy.spiderman.domain.XiaMiAll;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -20,7 +22,9 @@ public interface XiaMiAllRepository extends JpaRepository<XiaMiAll, Long> {
 
     List<XiaMiAll> findAllBySongname(String songname);
 
-    void deleteAllByTracktimeNotContains(String tracktime);
+    @Modifying
+    @Transactional
+    void deleteAllByTracktimeEndingWith(String tracktime);
 
 
 

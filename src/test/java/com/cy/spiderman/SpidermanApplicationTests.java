@@ -28,7 +28,7 @@ public class SpidermanApplicationTests {
     @Test
     public void first() {
         List<XiaMiAll> all = xiaMiAllRepository.findAll();
-        xiaMiFirstRepository.deleteAllByFirsttimeNotContains("2018");
+        xiaMiFirstRepository.deleteAllByFirsttimeEndingWith("前");
         for (XiaMiAll xiaMiAll : all) {
             String songname = xiaMiAll.getSongname();
             XiaMiFirst bySongname = xiaMiFirstRepository.findBySongname(songname);
@@ -44,8 +44,8 @@ public class SpidermanApplicationTests {
     @Test
     public void all() throws IOException {
         String url;
-        xiaMiAllRepository.deleteAllByTracktimeNotContains("2018");
-        for (int i = 20; i > 0; i--) {
+        xiaMiAllRepository.deleteAllByTracktimeEndingWith("前");
+        for (int i = 2; i > 0; i--) {
             url = "";
             Document parse = Jsoup.connect(url).ignoreContentType(true).execute().parse();
             Elements select = parse.select("#column695 > div.c695_main.clearfix > div.c695_left > div > div" +
@@ -68,14 +68,10 @@ public class SpidermanApplicationTests {
 
     @Test
     public void text() {
-
-        List<XiaMiAll> all = xiaMiAllRepository.findAllByTracktimeIsStartingWithOrderByIdAsc("2018-11-13");
+        List<XiaMiAll> all = xiaMiAllRepository.findAllByTracktimeIsStartingWithOrderByIdAsc("2018-11-");
 
         for (XiaMiAll xiaMiAll : all) {
             System.out.println(xiaMiAll.getSongname() + "---" + xiaMiAll.getPlayervia() + "---" + xiaMiAll.getTracktime());
-
-
         }
     }
-
 }

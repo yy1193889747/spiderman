@@ -1,6 +1,5 @@
 package com.cy.spiderman;
 
-import com.cy.spiderman.music.XiaMi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;

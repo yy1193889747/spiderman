@@ -1,14 +1,20 @@
 package com.cy.spiderman;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.cy.spiderman.domain.XiaMiAll;
 import com.cy.spiderman.domain.XiaMiFirst;
 import com.cy.spiderman.repository.XiaMiAllRepository;
 import com.cy.spiderman.repository.XiaMiFirstRepository;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,19 +31,35 @@ public class SpidermanApplicationTests {
     @Autowired
     private XiaMiFirstRepository xiaMiFirstRepository;
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private String first;
+
     @Test
     public void first() {
         List<XiaMiAll> all = xiaMiAllRepository.findAll();
         xiaMiFirstRepository.deleteAllByFirsttimeEndingWith("前");
+        xiaMiFirstRepository.deleteAllByLasttimeEndingWith("前");
         for (XiaMiAll xiaMiAll : all) {
             String songname = xiaMiAll.getSongname();
             XiaMiFirst bySongname = xiaMiFirstRepository.findBySongname(songname);
+            List<XiaMiAll> allBySongname = xiaMiAllRepository.findAllBySongname(songname);
+            XiaMiAll first = xiaMiAllRepository.findFirstBySongnameOrderByIdAsc(songname);
+            XiaMiAll last = xiaMiAllRepository.findFirstBySongnameOrderByIdDesc(songname);
             if (bySongname == null) {
-                XiaMiAll first = xiaMiAllRepository.findFirstBySongnameOrderByIdAsc(songname);
-                List<XiaMiAll> allBySongname = xiaMiAllRepository.findAllBySongname(songname);
                 xiaMiFirstRepository.save(new XiaMiFirst(first.getSongname(), first.getPlayervia(),
-                        first.getTracktime(), allBySongname.size()));
+                        first.getTracktime(), allBySongname.size(), last.getTracktime()));
+            } else {
+                xiaMiFirstRepository.updatecount(allBySongname.size(), songname, last.getTracktime());
             }
+        }
+    }
+
+    @Test
+    public void text() {
+        List<XiaMiAll> all = xiaMiAllRepository.findAllByTracktimeIsStartingWithOrderByIdAsc("2018-11-2");
+
+        for (XiaMiAll xiaMiAll : all) {
+            System.out.println(xiaMiAll.getSongname() + "---" + xiaMiAll.getPlayervia() + "---" + xiaMiAll.getTracktime());
         }
     }
 
@@ -67,11 +89,38 @@ public class SpidermanApplicationTests {
     }
 
     @Test
-    public void text() {
-        List<XiaMiAll> all = xiaMiAllRepository.findAllByTracktimeIsStartingWithOrderByIdAsc("2018-11-");
+    public void music() throws IOException, InterruptedException {
+        String params = "";
 
-        for (XiaMiAll xiaMiAll : all) {
-            System.out.println(xiaMiAll.getSongname() + "---" + xiaMiAll.getPlayervia() + "---" + xiaMiAll.getTracktime());
+
+        for (int j = 0; j < 10000; j++) {
+            String body =
+                    Jsoup.connect("https://music.163.com/weapi/user/playlist?csrf_token=").requestBody(params).ignoreContentType(true).method(Connection.Method.POST).execute().body();
+            JSONArray parse = JSON.parseObject(body).getJSONArray("playlist");
+
+            for (int i = 0; i < 1; i++) {
+
+
+                JSONObject o = parse.getJSONObject(i);
+
+
+                String trackCount = o.getString("trackCount");
+                String playCount = o.getString("playCount");
+                String nickname = o.getJSONObject("creator").getString("nickname");
+
+                if (null == first) {
+                    logger.info(trackCount + "---" + playCount + "---" + nickname);
+                    first = o.getString("playCount");
+                }
+                if (!first.equals(o.getString("playCount"))) {
+                    first = o.getString("playCount");
+                    logger.info(trackCount + "---" + playCount + "---" + nickname);
+                }
+            }
+
+            Thread.sleep(60000);
+
         }
     }
+
 }

@@ -18,12 +18,14 @@ public class XiaMiFirst implements Serializable {
     private String playervia;
     private String firsttime;
     private int count;
+    private String lasttime;
 
-    public XiaMiFirst(String songname, String playervia, String firsttime, int count) {
+    public XiaMiFirst(String songname, String playervia, String firsttime, int count, String lasttime) {
         this.songname = songname;
         this.playervia = playervia;
         this.firsttime = firsttime;
         this.count = count;
+        this.lasttime = lasttime;
     }
 
     public XiaMiFirst() {

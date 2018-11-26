@@ -22,8 +22,6 @@ public class Music163 {
     public static void main(String[] args) throws IOException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-
-
         String params = "";
 
         String body =
@@ -32,7 +30,7 @@ public class Music163 {
 
         JSONArray parse = JSON.parseObject(body).getJSONArray("playlist");
 
-        for (int i = 0; i < parse.size(); i++) {
+/*        for (int i = 0; i < 4; i++) {
 
             JSONObject o = parse.getJSONObject(i);
             String name = o.getString("name");
@@ -45,16 +43,14 @@ public class Music163 {
             String dd = format.format(new Long(trackUpdateTime));
             System.out.println(name + "---" + trackCount + "---" + playCount + "---" + dd + "---"+ d + "---" +
             nickname);
-        }
+        }*/
 
 
         String bodys =
                 Jsoup.connect(listLikeMusicUrl).requestBody(params).ignoreContentType(true).method(Connection.Method.POST).execute().body();
-
         JSONArray parses = JSON.parseObject(bodys).getJSONArray("weekData");
 
         for (int i = 0; i < parses.size(); i++) {
-
             JSONObject o = parses.getJSONObject(i);
             String name = o.getJSONObject("song").getString("name");
             String score = o.getString("score");

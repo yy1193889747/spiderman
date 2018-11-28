@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface XiaMiAllRepository extends JpaRepository<XiaMiAll, Long> {
 
-    XiaMiAll findBySongnameAndPlayerviaAndTracktime(String songname, String playervia, String tracktime);
+    List<XiaMiAll> findAllBySongnameAndPlayerviaAndTracktime(String songname, String playervia, String tracktime);
 
     XiaMiAll findFirstBySongnameOrderByIdAsc(String songname);
     XiaMiAll findFirstBySongnameOrderByIdDesc(String songname);

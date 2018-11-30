@@ -1,20 +1,14 @@
 package com.cy.spiderman;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.cy.spiderman.domain.XiaMiAll;
 import com.cy.spiderman.domain.XiaMiFirst;
 import com.cy.spiderman.repository.XiaMiAllRepository;
 import com.cy.spiderman.repository.XiaMiFirstRepository;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -70,7 +64,7 @@ public class SpidermanApplicationTests {
     public void all() throws IOException {
         String url;
         xiaMiAllRepository.deleteAllByTracktimeEndingWith("前");
-        for (int i = 3; i > 0; i--) {
+        for (int i = 5; i > 0; i--) {
             url = "";
             Document parse = Jsoup.connect(url).ignoreContentType(true).execute().parse();
             Elements select = parse.select("#column695 > div.c695_main.clearfix > div.c695_left > div > div" +
@@ -82,7 +76,7 @@ public class SpidermanApplicationTests {
                 System.out.println(song + "," + player + "," + tracktime);
                 List<XiaMiAll> bySongnameAndPlayerviaAndTracktime =
                         xiaMiAllRepository.findAllBySongnameAndPlayerviaAndTracktime(song, player, tracktime);
-                if (null == bySongnameAndPlayerviaAndTracktime || tracktime.contains("前")) {
+                if (bySongnameAndPlayerviaAndTracktime.size() == 0 || tracktime.contains("前")) {
                     System.out.println("不存在");
                     xiaMiAllRepository.save(new XiaMiAll(song, player, tracktime));
                 }

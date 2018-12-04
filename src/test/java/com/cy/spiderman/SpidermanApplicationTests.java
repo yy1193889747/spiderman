@@ -4,6 +4,7 @@ import com.cy.spiderman.domain.XiaMiAll;
 import com.cy.spiderman.domain.XiaMiFirst;
 import com.cy.spiderman.repository.XiaMiAllRepository;
 import com.cy.spiderman.repository.XiaMiFirstRepository;
+import com.cy.spiderman.util.JavaMail;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -11,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -84,4 +87,16 @@ public class SpidermanApplicationTests {
         }
     }
 
+    @Autowired
+    private JavaMailSender mailSender;
+    @Test
+    public void send() throws IOException {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("704739362@qq.com");
+        message.setTo("704739362@qq.com");
+        message.setSubject("主题：简单邮件");
+        message.setText("测试邮件内容");
+
+        mailSender.send(message);
+    }
 }
